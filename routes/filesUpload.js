@@ -1,7 +1,23 @@
 const router = require("express").Router();
 const fileUploader = require("../controllers/filesUpload");
+const uuid = require("uuid").v4;
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' })
+
+// Example - 1 
+// Simple specifying folder to upload files without any filtering or nameing convention
+// const upload = multer({ dest: 'uploads/' })
+
+// Example - 2
+// When need Naming convention
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads");
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${uuid()}-${file.originalname}`);
+  },
+});
+const upload = multer({ storage });
 
 router.post("/singlefile", upload.single("file"), fileUploader.singleFile);
 
