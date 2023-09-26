@@ -35,10 +35,18 @@ router.post("/multiplefields", upload.fields(
 // Only image can be uploaded
 const fileFilter = (req, file, cb) => {
     if (file.mimetype.startsWith("image")) cb(null, true);
-    else cb(new Error("File should be Image"), false);
+    else cb(new multer.MulterError("LIMIT_UNEXPECTED_FILE"), false);
 }
-const onyImageUplaod = multer({ storage, fileFilter });
+const onyImageUplaod = multer(
+    { 
+        storage, 
+        fileFilter, 
+        limits: { 
+            fileSize: 1000000, // in bytes
+            files: 2 //max files
+        }, 
+    });
 
-router.post("/onlyimage",onyImageUplaod.single("file"), fileUploader.singleFile);
+router.post("/onlyimage", onyImageUplaod.single("file"), fileUploader.singleFile);
 
 module.exports = router;
