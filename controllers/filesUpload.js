@@ -1,14 +1,14 @@
-function singleFile(req, res) {
+function singleFile(req,res){
     res.json({ "status": "success" });
 
 }
 
-function multipleFiles(req, res) {
+function multipleFiles(req,res){
     res.json({ "status": "success" });
 
 }
 
-function multipleFields(req, res) {
+function multipleFields(req,res){
     res.json({ "status": "success" });
 
 }
