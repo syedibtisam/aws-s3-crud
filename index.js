@@ -1,12 +1,12 @@
 const express = require('express');
 const app = express();
 const PORT = 3000;
-const fileUploadRoute = require("./routes/filesUpload");
+const UploadFilesRoute = require("./routes/uploadFiles");
 const errorHandler = require("./errorHandler");
 
 // upload files
-app.use("/api/v1/upload",fileUploadRoute);
+app.use("/api/v1/upload",UploadFilesRoute);
 
 app.use(errorHandler);
 
-app.listen(PORT, () => { console.log("server runing"); });
+app.listen(PORT, () => { console.log(`server runing`); });
