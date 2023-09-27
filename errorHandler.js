@@ -20,6 +20,11 @@ function errorHandler(error, req, res, next) {
             });
         }
     }
+    else {
+        return res.status(400).json({
+            "error":error.message
+        })
+    }
 }
 
 module.exports = errorHandler;

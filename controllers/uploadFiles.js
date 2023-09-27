@@ -1,4 +1,4 @@
-const { s3SingleFileUploadv3 } = require("./s3Services/uploadFiles");
+const { s3SingleFileUploadv3, s3MultipleFilesUploadv3 } = require("./s3Services/uploadFiles");
 
 // Disk storage
 function singleFile(req, res) {
@@ -21,7 +21,14 @@ async function s3SingleFile(req, res) {
         console.log(err);
       }
 }
-function s3MultipleFile(req, res) {
+async function s3MultipleFiles(req, res) {
+    try {
+        const results = await s3MultipleFilesUploadv3(req.files);
+        console.log(results);
+        return res.json({ status: "success" });
+      } catch (err) {
+        console.log(err);
+      }
     res.json({ "status": "success" });
 }
 module.exports = {
@@ -29,5 +36,5 @@ module.exports = {
     multipleFields,
     multipleFiles,
     s3SingleFile,
-    s3MultipleFile
+    s3MultipleFiles
 }
