@@ -1,7 +1,6 @@
 const {
     S3Client,
     PutObjectCommand,
-    ListBucketsCommand,
     ListObjectsCommand,
     GetObjectCommand,
     DeleteObjectCommand
