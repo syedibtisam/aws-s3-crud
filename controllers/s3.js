@@ -51,15 +51,19 @@ const readObjectInBucket = asyncHandler(async (req, res) => {
         }
     );
 });
+/**
+ * Required Permission on bucket: Write
+ * Ref: https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/DeleteObjectCommand/
+ */
 const deleteObjectInBucket = asyncHandler(async (req, res) => {
     const s3client = new S3Client();
     const input = {
         Bucket: process.env.AWS_BUCKET_NAME,
         Key: req.body.objectkey,
-      };
-      const command = new DeleteObjectCommand(input);
-      const response = await s3client.send(command);
-      return res.status(200).json(
+    };
+    const command = new DeleteObjectCommand(input);
+    const response = await s3client.send(command);
+    return res.status(200).json(
         {
             "Request": "deleteObjectInBucket",
             "status": "Accpeted",
@@ -90,19 +94,8 @@ const uploadObject = asyncHandler(async (req, res) => {
     );
 });
 
-
-///////////////////////////////////////////////////////
-async function s3SingleFileUploadv3(file) {
-    const s3client = new S3Client();
-    const param = {
-        Bucket: process.env.AWS_BUCKET_NAME,
-        Key: `uploads/${uuid()}-${file.originalname}`,
-        Body: file.buffer,
-    };
-    return await s3client.send(new PutObjectCommand(param));
-}
-
-async function s3MultipleFilesUploadv3(files) {
+// Upload Multiple Objects
+async function uploadObjects(files) {
     const s3client = new S3Client();
     const params = files.map((file) => {
         return {
@@ -111,27 +104,19 @@ async function s3MultipleFilesUploadv3(files) {
             Body: file.buffer,
         };
     });
-
-    return await Promise.all(
+    const response = await Promise.all(
         params.map((param) => s3client.send(new PutObjectCommand(param)))
     );
+    return res.status(200).json(
+        {
+            "Request": "uploadObjects",
+            "status": "Accpeted",
+            "data": response
+        }
+    );
 };
-async function listBuckets() {
-    try {
-        const s3client = new S3Client();
-        const input = {};
-        const command = new ListBucketsCommand(input);
-        return await s3client.send(command);
-    } catch (error) {
-        return { "error": error };
-    }
-
-}
-
 module.exports = {
-    s3SingleFileUploadv3,
-    s3MultipleFilesUploadv3,
-    listBuckets,
+    uploadObjects,
     readAllObjectsInBucket,
     readObjectInBucket,
     deleteObjectInBucket,

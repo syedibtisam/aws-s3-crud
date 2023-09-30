@@ -1,4 +1,4 @@
-const { s3SingleFileUploadv3, s3MultipleFilesUploadv3, listBuckets } = require("./s3Services/crud");
+const { s3SingleFileUploadv3, s3MultipleFilesUploadv3, listBuckets } = require("./s3");
 const sharp = require("sharp");
 
 // rezsing the image
